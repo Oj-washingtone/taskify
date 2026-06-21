@@ -8,7 +8,8 @@
     "scheme": "taskify",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "icon": "./assets/expo.icon",
+      "bundleIdentifier": "com.jalango.taskify"
     },
     "android": {
       "adaptiveIcon": {
@@ -17,7 +18,8 @@
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.jalango.taskify"
     },
     "web": {
       "output": "static",
@@ -34,11 +36,21 @@
             "imageWidth": 76
           }
         }
-      ]
+      ],
+      "expo-status-bar",
+      "expo-secure-store",
+      "@react-native-community/datetimepicker"
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "4b91c01f-9b93-4413-97e4-3afb487930ee"
+      }
+    },
+    "owner": "jalango"
   }
 }
