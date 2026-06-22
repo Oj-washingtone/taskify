@@ -45,10 +45,10 @@ function RootLayoutNav() {
     } else if (user && inAuthGroup) {
       // Redirect to app if authenticated
       router.replace('/(app)' as any);
+    } else {
+      // Hide splash screen once routing is fully settled
+      SplashScreen.hideAsync().catch(() => {});
     }
-
-    // Hide splash screen once routing is determined
-    SplashScreen.hideAsync().catch(() => {});
   }, [user, isLoading, segments]);
 
   if (isLoading) {

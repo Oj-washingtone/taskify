@@ -136,19 +136,14 @@ export default function SignupScreen() {
 
             <View style={styles.dividerContainer}>
               <View style={styles.divider} />
-              <Text style={styles.dividerText}>Or Continue With Account</Text>
+              <Text style={styles.dividerText}>Or Continue With</Text>
               <View style={styles.divider} />
             </View>
 
-            <View style={styles.socialContainer}>
-              <TouchableOpacity style={styles.socialButton} onPress={() => handleSocialMock('Facebook')}>
-                <Ionicons name="logo-facebook" size={24} color="#3b5998" />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.socialButton} onPress={() => handleSocialMock('Google')}>
+            <View style={[styles.socialContainer, { width: '100%' }]}>
+              <TouchableOpacity style={[styles.socialButton, { width: '100%', flexDirection: 'row', gap: 12, paddingHorizontal: 16 }]} onPress={() => handleSocialMock('Google')}>
                 <Ionicons name="logo-google" size={24} color="#DB4437" />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.socialButton} onPress={() => handleSocialMock('Apple')}>
-                <Ionicons name="logo-apple" size={24} color="#000" />
+                <Text style={{ fontSize: 16, fontWeight: '600', color: '#010F1C' }}>Continue with Google</Text>
               </TouchableOpacity>
             </View>
           </View>
