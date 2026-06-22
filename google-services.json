@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "120577688145",
+    "project_id": "taskify-500210",
+    "storage_bucket": "taskify-500210.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:120577688145:android:25c5434e5ddcd923feee70",
+        "android_client_info": {
+          "package_name": "com.jalango.taskify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "120577688145-vm7snc7pl95c3o7mrq73ke54pnn646kb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCT7zrYluwvmFzt-bRpeKX6LFnbjoWKF58"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "120577688145-vm7snc7pl95c3o7mrq73ke54pnn646kb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "120577688145-17ha1eg42tsh4471vetlca5lrg1uv4gb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.jalango.taskify"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

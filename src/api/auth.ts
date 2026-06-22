@@ -38,4 +38,13 @@ export async function logout(): Promise<void> {
   }
 }
 
-export async function socialLogin() {} // TODO: implement
+export interface SocialLoginPayload {
+  provider: 'google' | 'apple' | 'facebook';
+  idToken: string;
+}
+
+export async function socialLogin(payload: SocialLoginPayload): Promise<AuthResponse> {
+  const { data } = await authApi.post("/auth/social", payload);
+  await tokenStorage.setTokens(data.accessToken, data.refreshToken);
+  return data;
+}

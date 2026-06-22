@@ -3,6 +3,7 @@ import { User } from "@/types/user.types";
 import { getProfile } from "@/api/account";
 import { tokenStorage } from "@/api/tokenStorage";
 import { authEvents } from "@/api/authEvents";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface AuthContextType {
   user: User | null;
@@ -23,21 +24,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const token = await tokenStorage.getAccessToken();
       if (token) {
-        const profile = await getProfile();
-        setUser(profile);
+        // Try loading from local cache for instant startup
+        const cachedStr = await AsyncStorage.getItem('USER_PROFILE');
+        if (cachedStr) {
+          setUser(JSON.parse(cachedStr));
+          setIsLoading(false); // Drop splash screen instantly
+          
+          // Silently sync profile in background
+          getProfile().then(profile => {
+            setUser(profile);
+            AsyncStorage.setItem('USER_PROFILE', JSON.stringify(profile));
+          }).catch(err => console.error("Background auth sync failed:", err));
+        } else {
+          // Fresh login, block until fetched
+          const profile = await getProfile();
+          setUser(profile);
+          await AsyncStorage.setItem('USER_PROFILE', JSON.stringify(profile));
+          setIsLoading(false);
+        }
       } else {
         setUser(null);
+        setIsLoading(false);
       }
     } catch (error) {
       console.error("Auth check failed:", error);
       setUser(null);
-    } finally {
       setIsLoading(false);
     }
   };
 
   const logout = async () => {
     await tokenStorage.clearToken();
+    await AsyncStorage.removeItem('USER_PROFILE');
     setUser(null);
   };
 

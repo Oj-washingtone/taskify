@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Alert, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, StyleSheet, Alert, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, ActivityIndicator, Image } from 'react-native';
 import { useAuth } from '@/context/AuthContext';
-import { signup } from '@/api/auth';
+import { signup, socialLogin } from '@/api/auth';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -45,8 +46,51 @@ export default function SignupScreen() {
     }
   };
 
-  const handleSocialMock = async (provider: string) => {
-    Alert.alert('Social Auth Mock', `Mocking ${provider} authentication. Native keys not configured.`);
+  useEffect(() => {
+    const webClientId = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID;
+    const iosClientId = process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID;
+    
+    if (webClientId) {
+      GoogleSignin.configure({
+        webClientId,
+        iosClientId,
+      });
+    }
+  }, []);
+
+  const handleGoogleLogin = async () => {
+    try {
+      setLoading(true);
+
+      const currentWebId = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID;
+      console.log('--- GOOGLE SIGN IN TRIGGERED ---');
+      console.log('Web Client ID at runtime:', currentWebId);
+      
+      if (!currentWebId) {
+        Alert.alert("Missing Configuration", "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID is not defined.");
+        return;
+      }
+
+      // Re-configure just in case useEffect missed it
+      GoogleSignin.configure({
+        webClientId: currentWebId,
+      });
+
+      await GoogleSignin.hasPlayServices();
+      console.log('Play Services available. Attempting signIn...');
+      const response: any = await GoogleSignin.signIn();
+      const idToken = response.data?.idToken || response.idToken;
+
+      if (!idToken) throw new Error("Google login failed: Missing ID token");
+      
+      await socialLogin({ provider: 'google', idToken });
+      await checkAuth();
+    } catch (e: any) {
+      console.error('GOOGLE LOGIN ERROR:', e);
+      Alert.alert('Google Sign-In Failed', e.message || 'An unexpected error occurred during Google Sign-In.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -141,9 +185,9 @@ export default function SignupScreen() {
             </View>
 
             <View style={[styles.socialContainer, { width: '100%' }]}>
-              <TouchableOpacity style={[styles.socialButton, { width: '100%', flexDirection: 'row', gap: 12, paddingHorizontal: 16 }]} onPress={() => handleSocialMock('Google')}>
-                <Ionicons name="logo-google" size={24} color="#DB4437" />
-                <Text style={{ fontSize: 16, fontWeight: '600', color: '#010F1C' }}>Continue with Google</Text>
+              <TouchableOpacity style={styles.googleButton} onPress={handleGoogleLogin} disabled={loading}>
+                <Image source={require('../../../assets/images/google.png')} style={{ width: 22, height: 22 }} resizeMode="contain" />
+                <Text style={styles.googleButtonText}>Continue with Google</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -194,9 +238,10 @@ const styles = StyleSheet.create({
   dividerText: { color: '#646464', fontSize: 12, paddingHorizontal: 15 },
   
   socialContainer: { flexDirection: 'row', gap: 20 },
-  socialButton: {
-    width: 50, height: 50, borderRadius: 25, backgroundColor: '#fff',
-    justifyContent: 'center', alignItems: 'center',
+  googleButton: {
+    width: '100%', height: 44, borderRadius: 10, backgroundColor: '#fff',
+    flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10,
     shadowColor: '#000', shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.05, shadowRadius: 5, elevation: 2
-  }
+  },
+  googleButtonText: { fontSize: 16, fontWeight: '600', color: '#010F1C' }
 });
