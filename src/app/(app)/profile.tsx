@@ -13,6 +13,8 @@ export default function ProfileScreen() {
   const [newPassword, setNewPassword] = useState('');
   
   const [deletePassword, setDeletePassword] = useState('');
+  
+  const userInitial = user?.name?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || 'U';
 
   const handleUpdate = async () => {
     try {
@@ -63,9 +65,13 @@ export default function ProfileScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-        <Text style={styles.title}>Profile Settings</Text>
-        
-        {user?.email && <Text style={styles.subtitle}>{user.email}</Text>}
+        <View style={styles.headerContainer}>
+          <View style={styles.largeAvatar}>
+            <Text style={styles.largeAvatarText}>{userInitial}</Text>
+          </View>
+          <Text style={styles.title}>Profile Settings</Text>
+          {user?.email && <Text style={styles.subtitle}>{user.email}</Text>}
+        </View>
         
         <View style={styles.section}>
           <Text style={styles.label}>Full Name</Text>
@@ -111,6 +117,10 @@ export default function ProfileScreen() {
           </TouchableOpacity>
         </View>
 
+        <TouchableOpacity style={styles.logoutButton} onPress={logout}>
+          <Text style={styles.logoutButtonText}>Log Out</Text>
+        </TouchableOpacity>
+
         <View style={styles.section}>
           <Text style={styles.dangerTitle}>Danger Zone</Text>
           <Text style={styles.label}>Password to Confirm Deletion</Text>
@@ -126,10 +136,6 @@ export default function ProfileScreen() {
             <Text style={styles.dangerButtonText}>Delete Account</Text>
           </TouchableOpacity>
         </View>
-        
-        <TouchableOpacity style={styles.logoutButton} onPress={logout}>
-          <Text style={styles.logoutButtonText}>Log Out</Text>
-        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
@@ -138,8 +144,28 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#F8F9FA' },
   scroll: { padding: 24, paddingBottom: 40 },
-  title: { fontSize: 32, fontWeight: 'bold', marginBottom: 8, color: '#010F1C' },
-  subtitle: { fontSize: 16, color: '#646464', marginBottom: 32 },
+  headerContainer: { alignItems: 'center', marginBottom: 12 },
+  largeAvatar: {
+    width: 96,
+    height: 96,
+    borderRadius: 48,
+    backgroundColor: '#3BB77E',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+    shadowColor: '#3BB77E',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 5
+  },
+  largeAvatarText: {
+    color: '#FFFFFF',
+    fontSize: 42,
+    fontWeight: 'bold',
+  },
+  title: { fontSize: 32, fontWeight: 'bold', marginBottom: 8, color: '#010F1C', textAlign: 'center' },
+  subtitle: { fontSize: 16, color: '#646464', marginBottom: 32, textAlign: 'center' },
   section: { marginBottom: 40 },
   
   label: { fontSize: 13, fontWeight: '600', marginBottom: 6, marginTop: 14, color: '#010F1C' },

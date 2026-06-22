@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, Alert, TouchableOpacity, KeyboardAvoidingView, Platform, ActivityIndicator, Image } from 'react-native';
-import { useAuth } from '@/context/AuthContext';
 import { loginWithEmail, socialLogin } from '@/api/auth';
+import { useAuth } from '@/context/AuthContext';
+import { Ionicons } from '@expo/vector-icons';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, Alert, Image, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
 
 export default function LoginScreen() {
   const { checkAuth } = useAuth();
@@ -33,7 +33,7 @@ export default function LoginScreen() {
       console.log('URL:', process.env.EXPO_PUBLIC_API_URL);
       console.log('Payload:', { email: email.trim(), password: password.trim() });
       await loginWithEmail({ email: email.trim(), password: password.trim() });
-      await checkAuth(); 
+      await checkAuth();
     } catch (e: any) {
       console.error('LOGIN ERROR:', e.response?.status, e.response?.data);
       const serverError = e.response?.data?.error || e.response?.data?.message;
@@ -46,7 +46,7 @@ export default function LoginScreen() {
   useEffect(() => {
     const webClientId = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID;
     const iosClientId = process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID;
-    
+
     if (webClientId) {
       GoogleSignin.configure({
         webClientId,
@@ -58,17 +58,17 @@ export default function LoginScreen() {
   const handleGoogleLogin = async () => {
     try {
       setLoading(true);
-      
+
       const currentWebId = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID;
       console.log('--- GOOGLE SIGN IN TRIGGERED ---');
       console.log('Web Client ID at runtime:', currentWebId);
-      
+
       if (!currentWebId) {
         Alert.alert("Missing Configuration", "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID is not defined.");
         return;
       }
 
-      // Re-configure just in case useEffect missed it
+
       GoogleSignin.configure({
         webClientId: currentWebId,
       });
@@ -79,7 +79,7 @@ export default function LoginScreen() {
       const idToken = response.data?.idToken || response.idToken;
 
       if (!idToken) throw new Error("Google login failed: Missing ID token");
-      
+
       await socialLogin({ provider: 'google', idToken });
       await checkAuth();
     } catch (e: any) {
@@ -102,16 +102,16 @@ export default function LoginScreen() {
         <View style={styles.content}>
           <Text style={styles.title}>Log in</Text>
           <Text style={styles.subtitle}>Enter your email and password to securely access your account and manage your services.</Text>
-          
+
           {error ? <Text style={styles.error}>{error}</Text> : null}
-          
+
           <View style={styles.inputContainer}>
             <Ionicons name="mail-outline" size={20} color="#646464" style={styles.inputIcon} />
-            <TextInput 
-              style={styles.input} 
-              placeholder="Email address" 
+            <TextInput
+              style={styles.input}
+              placeholder="Email address"
               placeholderTextColor="#939393"
-              value={email} 
+              value={email}
               onChangeText={setEmail}
               autoCapitalize="none"
               keyboardType="email-address"
@@ -120,19 +120,19 @@ export default function LoginScreen() {
 
           <View style={styles.inputContainer}>
             <Ionicons name="lock-closed-outline" size={20} color="#646464" style={styles.inputIcon} />
-            <TextInput 
-              style={styles.input} 
-              placeholder="Password" 
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
               placeholderTextColor="#939393"
-              secureTextEntry={!showPassword} 
-              value={password} 
+              secureTextEntry={!showPassword}
+              value={password}
               onChangeText={setPassword}
             />
             <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.eyeIcon}>
               <Ionicons name={showPassword ? "eye-outline" : "eye-off-outline"} size={20} color="#646464" />
             </TouchableOpacity>
           </View>
-          
+
           <TouchableOpacity style={styles.loginButton} onPress={handleLogin} disabled={loading}>
             {loading ? (
               <ActivityIndicator color="#fff" />
@@ -140,7 +140,7 @@ export default function LoginScreen() {
               <Text style={styles.loginButtonText}>Login</Text>
             )}
           </TouchableOpacity>
-          
+
           <View style={styles.signupContainer}>
             <Text style={styles.signupText}>Don't have an account? </Text>
             <TouchableOpacity onPress={() => router.push('/(auth)/signup' as any)}>
@@ -170,16 +170,16 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#F8F9FA' },
   keyboardView: { flex: 1 },
   header: { paddingHorizontal: 20, paddingTop: 10, paddingBottom: 20 },
-  backButton: { 
-    width: 40, height: 40, borderRadius: 20, backgroundColor: '#fff', 
+  backButton: {
+    width: 40, height: 40, borderRadius: 20, backgroundColor: '#fff',
     justifyContent: 'center', alignItems: 'center',
-    shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 3, elevation: 2 
+    shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 3, elevation: 2
   },
   content: { flex: 1, paddingHorizontal: 24, alignItems: 'center' },
   title: { fontSize: 32, fontWeight: 'bold', color: '#010F1C', marginBottom: 12 },
   subtitle: { fontSize: 14, color: '#646464', textAlign: 'center', marginBottom: 32, lineHeight: 22, paddingHorizontal: 10 },
   error: { color: '#ff3b30', marginBottom: 16, textAlign: 'center', fontSize: 14 },
-  
+
   inputContainer: {
     flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff',
     borderRadius: 10, paddingHorizontal: 14, marginBottom: 16,
@@ -189,22 +189,22 @@ const styles = StyleSheet.create({
   inputIcon: { marginRight: 10 },
   input: { flex: 1, fontSize: 14, color: '#010F1C' },
   eyeIcon: { padding: 4 },
-  
+
   loginButton: {
     backgroundColor: '#3BB77E', borderRadius: 10, height: 44, width: '100%',
     justifyContent: 'center', alignItems: 'center', marginTop: 12,
     shadowColor: '#3BB77E', shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.3, shadowRadius: 10, elevation: 5
   },
   loginButtonText: { color: '#fff', fontSize: 16, fontWeight: '600' },
-  
+
   signupContainer: { flexDirection: 'row', marginTop: 24, marginBottom: 40 },
   signupText: { color: '#646464', fontSize: 14 },
   signupLink: { color: '#3BB77E', fontSize: 14, fontWeight: '600' },
-  
+
   dividerContainer: { flexDirection: 'row', alignItems: 'center', width: '100%', marginBottom: 30 },
   divider: { flex: 1, height: 1, backgroundColor: '#E0E0E0' },
   dividerText: { color: '#646464', fontSize: 12, paddingHorizontal: 15 },
-  
+
   socialContainer: { flexDirection: 'row', gap: 20 },
   googleButton: {
     width: '100%', height: 44, borderRadius: 10, backgroundColor: '#fff',

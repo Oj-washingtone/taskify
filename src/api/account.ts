@@ -21,3 +21,10 @@ export async function updateProfile(profileData: UpdateProfileDto): Promise<{
 
   return data;
 }
+
+export async function deleteAccount(password?: string): Promise<{ message: string }> {
+  const { data } = await api.delete("/user/profile", {
+    data: { password }
+  });
+  return data;
+}
