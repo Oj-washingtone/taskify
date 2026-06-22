@@ -2,7 +2,7 @@
 
 ## Overview
 
-Taskify is a high-performance, production-ready scheduling and task management mobile application built with React Native and Expo. It features a beautifully fluid dual-view UI (Timeline and List views), comprehensive global state management, deep offline resilience, and mobile-native capabilities like local push notifications and native email integrations.
+Taskify is a high-performance, production-ready scheduling and task management mobile application built with React Native and Expo. It features a beautifully fluid dual-view UI (Timeline and List views), a robust Hybrid State Management architecture (Redux + Context), deep offline resilience, and modern mobile-native capabilities like Native Google OAuth Sign-In, local push notifications, and dynamic profile avatars.
 
 ---
 
@@ -20,7 +20,7 @@ Before you begin, ensure you have the following installed on your development ma
 
 ---
 
-## 🛠 Installation & Initialization
+## Installation & Initialization
 
 Follow these granular, step-by-step instructions to boot the application locally:
 
@@ -60,17 +60,21 @@ Follow these granular, step-by-step instructions to boot the application locally
 
 ---
 
-## ⚙️ Environment Configuration
+The project utilizes Expo's built-in environment variable handler. Prefix variables with `EXPO_PUBLIC_` to expose them securely to the React Native runtime.
 
-The project utilizes Expo's built-in environment variable handler. Prefix variables with `EXPO_PUBLIC_` to expose them securely to the React Native runtime. See `.env.example` for the specific template variables required.
+You must copy `.env.example` to `.env` and fill in:
+
+1. `EXPO_PUBLIC_API_URL`: Your backend Express server URI.
+2. `EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID`: Your native Android client ID generated from the Google Cloud Console.
+3. `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID`: Your Web client ID for cross-platform audience token verification with the backend.
 
 ---
 
-## 🏗 Engineering Breakdown & Architecture
+## Engineering Breakdown & Architecture
 
-### State Management Pattern: Redux Toolkit + Redux Persist
+### State Management Pattern: Hybrid Redux + Context
 
-The application completely departs from localized prop-drilling and basic React Context in favor of a robust, highly scalable **Redux Toolkit** global state architecture.
+The application utilizes a highly scalable **Hybrid State Architecture** to cleanly separate complex background logic from fast UI interactions.
 
 **How it works:**
 
@@ -96,4 +100,13 @@ We integrated `@react-native-async-storage/async-storage` deeply wrapped in `red
    - _Justification_: While fundamentally imperfect compared to actually modifying the backend SQL schema, it brilliantly adheres to strict assessment constraints (frontend-only logic) while safely preserving complex, state-rich mobile features.
 3. **Local Push Notifications over Remote FCM**:
    - _Trade-off_: We utilize the `expo-notifications` local-scheduling engine natively on the device runtime instead of waiting for remote push triggers sent via a CRON job on a backend server.
-   - _Justification_: This securely bypasses the need for complex Google Firebase / APNs credential setups while guaranteeing high-speed reminders that operate with 100% efficacy even if the user drops into Airplane mode.
+   - _Justification_: This securely bypasses the need for complex Firebase / APNs credential setups while guaranteeing high-speed reminders that operate with 100% efficacy even if the user drops into Airplane mode.
+4. **Native Google OAuth SDK over Web Browser Redirects**:
+   - _Trade-off_: We integrated `@react-native-google-signin/google-signin` which requires compiling a custom native Android build and strictly matching SHA-1 keystore fingerprints, rather than using a simple Expo web-browser `AuthSession`.
+   - _Justification_: Web-based redirects force the user out of the application into a browser, degrading the UX. Native Google Play Services integration provides a seamless, highly secure 1-tap login experience that feels completely integrated into the operating system.
+
+### UI/UX & Theming
+
+- Custom splash screen and iconography compiled directly into the native iOS/Android directories via Expo Prebuild.
+- Dynamic Profile Avatars automatically generated from user initials using the brand's primary color (`#3BB77E`).
+- Responsive, fluid inputs unified across authentication and profile settings screens to ensure design consistency.
