@@ -39,8 +39,13 @@ export async function logout(): Promise<void> {
 }
 
 export interface SocialLoginPayload {
-  provider: 'google' | 'apple' | 'facebook';
-  idToken: string;
+  provider: 'google' | 'github';
+  idToken?: string;
+  accessToken?: string;
+  email?: string;
+  providerId?: string;
+  name?: string;
+  avatarUrl?: string;
 }
 
 export async function socialLogin(payload: SocialLoginPayload): Promise<AuthResponse> {
