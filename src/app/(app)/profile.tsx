@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Alert, ScrollView, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '@/context/AuthContext';
 import { updateProfile, deleteAccount } from '@/api/account';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -75,42 +76,55 @@ export default function ProfileScreen() {
         
         <View style={styles.section}>
           <Text style={styles.label}>Full Name</Text>
-          <TextInput 
-            style={styles.input} 
-            value={name} 
-            onChangeText={setName} 
-            placeholderTextColor="#939393"
-            placeholder="John Doe"
-          />
+          <View style={styles.inputContainer}>
+            <Ionicons name="person-outline" size={20} color="#646464" style={styles.inputIcon} />
+            <TextInput 
+              style={styles.input} 
+              value={name} 
+              onChangeText={setName} 
+              placeholderTextColor="#939393"
+              placeholder="John Doe"
+            />
+          </View>
           
           <Text style={styles.label}>Avatar URL</Text>
-          <TextInput 
-            style={styles.input} 
-            value={avatarUrl} 
-            onChangeText={setAvatarUrl} 
-            placeholderTextColor="#939393"
-            placeholder="https://example.com/avatar.jpg"
-          />
+          <View style={styles.inputContainer}>
+            <Ionicons name="image-outline" size={20} color="#646464" style={styles.inputIcon} />
+            <TextInput 
+              style={styles.input} 
+              value={avatarUrl} 
+              onChangeText={setAvatarUrl} 
+              placeholderTextColor="#939393"
+              placeholder="https://example.com/avatar.jpg"
+              autoCapitalize="none"
+            />
+          </View>
           
           <Text style={styles.label}>Current Password</Text>
-          <TextInput 
-            style={styles.input} 
-            secureTextEntry 
-            value={currentPassword} 
-            onChangeText={setCurrentPassword} 
-            placeholderTextColor="#939393"
-            placeholder="Required for password changes"
-          />
+          <View style={styles.inputContainer}>
+            <Ionicons name="lock-closed-outline" size={20} color="#646464" style={styles.inputIcon} />
+            <TextInput 
+              style={styles.input} 
+              secureTextEntry 
+              value={currentPassword} 
+              onChangeText={setCurrentPassword} 
+              placeholderTextColor="#939393"
+              placeholder="Required for password changes"
+            />
+          </View>
           
           <Text style={styles.label}>New Password</Text>
-          <TextInput 
-            style={styles.input} 
-            secureTextEntry 
-            value={newPassword} 
-            onChangeText={setNewPassword} 
-            placeholderTextColor="#939393"
-            placeholder="Leave blank to keep current"
-          />
+          <View style={styles.inputContainer}>
+            <Ionicons name="lock-closed-outline" size={20} color="#646464" style={styles.inputIcon} />
+            <TextInput 
+              style={styles.input} 
+              secureTextEntry 
+              value={newPassword} 
+              onChangeText={setNewPassword} 
+              placeholderTextColor="#939393"
+              placeholder="Leave blank to keep current"
+            />
+          </View>
           
           <TouchableOpacity style={styles.primaryButton} onPress={handleUpdate}>
             <Text style={styles.primaryButtonText}>Save Changes</Text>
@@ -124,14 +138,17 @@ export default function ProfileScreen() {
         <View style={styles.section}>
           <Text style={styles.dangerTitle}>Danger Zone</Text>
           <Text style={styles.label}>Password to Confirm Deletion</Text>
-          <TextInput 
-            style={styles.input} 
-            secureTextEntry 
-            value={deletePassword} 
-            onChangeText={setDeletePassword} 
-            placeholderTextColor="#939393"
-            placeholder="Enter your password to verify"
-          />
+          <View style={styles.inputContainer}>
+            <Ionicons name="lock-closed-outline" size={20} color="#646464" style={styles.inputIcon} />
+            <TextInput 
+              style={styles.input} 
+              secureTextEntry 
+              value={deletePassword} 
+              onChangeText={setDeletePassword} 
+              placeholderTextColor="#939393"
+              placeholder="Enter your password to verify"
+            />
+          </View>
           <TouchableOpacity style={styles.dangerButton} onPress={handleDeleteAccount}>
             <Text style={styles.dangerButtonText}>Delete Account</Text>
           </TouchableOpacity>
@@ -169,11 +186,14 @@ const styles = StyleSheet.create({
   section: { marginBottom: 40 },
   
   label: { fontSize: 13, fontWeight: '600', marginBottom: 6, marginTop: 14, color: '#010F1C' },
-  input: { 
-    borderWidth: 1, borderColor: '#E0E0E0', backgroundColor: '#fff',
-    paddingHorizontal: 14, height: 44, borderRadius: 10, fontSize: 14, color: '#010F1C',
-    shadowColor: '#000', shadowOpacity: 0.02, shadowOffset: { width: 0, height: 2 }, shadowRadius: 4, elevation: 1
+  inputContainer: {
+    flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff',
+    borderRadius: 10, paddingHorizontal: 14,
+    height: 44, width: '100%',
+    shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.03, shadowRadius: 4, elevation: 1
   },
+  inputIcon: { marginRight: 10 },
+  input: { flex: 1, fontSize: 14, color: '#010F1C' },
   
   dangerTitle: { fontSize: 16, fontWeight: 'bold', color: '#ff3b30', marginBottom: 8 },
   

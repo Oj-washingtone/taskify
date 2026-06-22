@@ -63,7 +63,7 @@ export default function SignupScreen() {
       setLoading(true);
 
       const currentWebId = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID;
-      console.log('--- GOOGLE SIGN IN TRIGGERED ---');
+      console.log('GOOGLE SIGN IN TRIGGERED');
       console.log('Web Client ID at runtime:', currentWebId);
 
       if (!currentWebId) {
