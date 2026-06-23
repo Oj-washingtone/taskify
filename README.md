@@ -44,7 +44,7 @@ Follow these granular, step-by-step instructions to boot the application locally
    cp .env.example .env
    ```
 
-   _Note: Open `.env` and ensure `EXPO_PUBLIC_API_URL` points to your running Express backend. (e.g., `http://localhost:3000` for an emulator, or your computer's LAN IP like `http://192.168.1.5:3000` if you are testing on a physical mobile device)._
+   \_Note: Open `.env` and ensure `EXPO_PUBLIC_API_URL` points to your running Express backend. (e.g., `http://localhost:3000` for an emulator, or your computer's LAN IP like `http://192.168.1.5:3000` if you are testing on a physical mobile device).\_I have hosted a version of the backend `https://taskify.linxs.co.ke` so you can use it as well.
 
 4. **Boot the Metro Bundler**
    Start the Expo development server. We recommend running with the cache-clearing flag (`-c`) the first time to ensure all new native modules link correctly:
